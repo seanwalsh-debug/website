@@ -11,6 +11,36 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="contact-corner">
+    <button class="button reveal-button" id="reveal-contact" aria-expanded="false" aria-controls="contact-details">
+      Contact Me <span class="reveal-icon" aria-hidden="true">↓</span>
+    </button>
+
+    <div class="contact-details" id="contact-details" hidden>
+      <dl>
+        <div>
+          <dt>Email</dt>
+          <dd>
+            <a href="mailto:hello@seanwalsh.example">hello@seanwalsh.example</a>
+            <button class="copy" data-copy="hello@seanwalsh.example">Copy</button>
+          </dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd><a href="tel:+442079460123">+44 20 7946 0123</a></dd>
+        </div>
+        <div>
+          <dt>LinkedIn</dt>
+          <dd><a href="https://www.linkedin.com/in/sean-walsh-804a502b4/" target="_blank" rel="noopener">sean-walsh-804a502b4 ↗</a></dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>London, United Kingdom</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
   <div class="layout">
     <aside class="sidebar">
       <div>
@@ -28,7 +58,6 @@
           <a href="#about"><span class="nav-line"></span>About</a>
           <a href="#experience"><span class="nav-line"></span>Experience</a>
           <a href="#skills"><span class="nav-line"></span>Skills</a>
-          <a href="#contact"><span class="nav-line"></span>Contact Me</a>
         </nav>
       </div>
 
@@ -102,39 +131,6 @@
         </ul>
       </section>
 
-      <section id="contact" class="section">
-        <h2>Contact Me</h2>
-        <p class="big">Let's connect<span class="dot">.</span></p>
-        <p>I'm always happy to hear from new people. Click below to see my contact details.</p>
-
-        <button class="button reveal-button" id="reveal-contact" aria-expanded="false" aria-controls="contact-details">
-          Show contact details <span class="reveal-icon" aria-hidden="true">↓</span>
-        </button>
-
-        <div class="contact-details" id="contact-details" hidden>
-          <dl>
-            <div>
-              <dt>Email</dt>
-              <dd>
-                <a href="mailto:hello@seanwalsh.example">hello@seanwalsh.example</a>
-                <button class="copy" data-copy="hello@seanwalsh.example">Copy</button>
-              </dd>
-            </div>
-            <div>
-              <dt>Phone</dt>
-              <dd><a href="tel:+442079460123">+44 20 7946 0123</a></dd>
-            </div>
-            <div>
-              <dt>LinkedIn</dt>
-              <dd><a href="https://www.linkedin.com/in/sean-walsh-804a502b4/" target="_blank" rel="noopener">sean-walsh-804a502b4 ↗</a></dd>
-            </div>
-            <div>
-              <dt>Location</dt>
-              <dd>London, United Kingdom</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
 
       <footer class="footer">© <span id="year">2026</span> Sean Walsh</footer>
     </main>
@@ -156,11 +152,20 @@
     // Reveal / hide contact details
     const revealButton = document.getElementById('reveal-contact');
     const details = document.getElementById('contact-details');
+    const setContactOpen = open => {
+      revealButton.setAttribute('aria-expanded', String(open));
+      details.hidden = !open;
+    };
     revealButton.addEventListener('click', () => {
-      const open = revealButton.getAttribute('aria-expanded') === 'true';
-      revealButton.setAttribute('aria-expanded', String(!open));
-      revealButton.firstChild.textContent = open ? 'Show contact details ' : 'Hide contact details ';
-      details.hidden = open;
+      setContactOpen(revealButton.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Close the contact panel when clicking elsewhere or pressing Escape
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.contact-corner')) setContactOpen(false);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setContactOpen(false);
     });
 
     // Copy email to clipboard
